@@ -1,26 +1,28 @@
 function generateTestScript() {
     const inputJson = document.getElementById('inputJson').value;
-    try {
-        const input = JSON.parse(inputJson);
-        const httpCode = input.httpCode; // Assuming this is included in your JSON
-        const responseBody = JSON.stringify(input.responseBody); // Convert the responseBody object back to a string to include in the generated script
+    const inputStatusCode = document.getElementById('inputStatusCode').value; // Get the status code from the input field
 
-        // Generate the test script without including the line that updates the output element
+    try {
+        const responseBody = JSON.parse(inputJson); // Assuming the entire JSON is the response body
+
+        // Generate the test script using the status code and response body
         const testScript = `const context = pm.info.requestName + " | ";
 const response = pm.response.json();
 
-pm.test(context + "Status code is ${httpCode}", function () {
-    pm.response.to.have.status(${httpCode});
+pm.test(context + "Status code is ${inputStatusCode}", function () {
+    pm.response.to.have.status(${inputStatusCode});
 });
 
 pm.test(context + "Validate response body JSON", function () {
     pm.response.to.be.json;
-    const jsonData = JSON.parse(\`${responseBody}\`); // Correctly insert the responseBody string
+    const jsonData = JSON.parse(\`${JSON.stringify(responseBody)}\`);
     console.log(jsonData);
 });
 
-// Add more dynamic generation logic based on the responseBody structure`;
+// Further tests can be dynamically generated based on the responseBody
 
-        // Correctly update the output element here, outside the template literal
-        document.getElementById('output').textContent = testScript;
+document.getElementById('output').textContent = testScript;
     } catch (e) {
+        document.getElementById('output').textContent = 'Invalid JSON input';
+    }
+}
