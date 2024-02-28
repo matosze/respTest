@@ -21,7 +21,6 @@ pm.test(context + "Validate response body JSON", function () {
 
 // Add more dynamic generation logic based on the responseBody structure
 
-document.getElementById('output').textContent = testScript;`;
 
         document.getElementById('output').textContent = testScript;
     } catch (e) {
