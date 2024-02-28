@@ -1,3 +1,25 @@
+function populate200() {
+    document.getElementById('inputStatusCode').value = 200;
+    document.getElementById('inputJson').value = JSON.stringify({
+        "contacts": [
+            {
+                "customerReference": 7,
+                // Add the rest of the JSON structure here...
+            },
+            // Add more contacts as needed
+        ]
+    }, null, 2); // Format the JSON for readability
+}
+
+function populate500() {
+    document.getElementById('inputStatusCode').value = 500;
+    document.getElementById('inputJson').value = JSON.stringify({
+        "message": "A Generic Technical error has occurred",
+        // Add the rest of the JSON structure here...
+    }, null, 2); // Format the JSON for readability
+}
+
+
 function generateTestScript() {
     const inputStatusCode = document.getElementById('inputStatusCode').value;
     const inputJson = document.getElementById('inputJson').value;
