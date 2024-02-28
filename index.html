@@ -8,7 +8,11 @@
 </head>
 <body>
     <h1>Test Script Generator</h1>
+    <div class="last-published">Last Published: <span id="lastPublishedDate">Loading...</span></div>
     <input type="number" id="inputStatusCode" placeholder="HTTP Status Code" />
+    <input type="number" id="inputStatusCode" placeholder="HTTP Status Code" />
+    <button onclick="populate200()">Populate 200</button>
+    <button onclick="populate500()">Populate 500</button>
     <textarea id="inputJson" placeholder="Paste your JSON here"></textarea>
     <button onclick="generateTestScript()">Generate Test Script</button>
     <pre id="output"></pre>
