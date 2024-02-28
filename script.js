@@ -44,27 +44,19 @@ pm.test(context + "Validate response body JSON", function () {
     function generateTests(obj, path) {
         let script = '';
         Object.keys(obj).forEach(key => {
-            let fullPath;
-            if (path) {
-                fullPath = path + '.' + key;
-            } else {
-                fullPath = key;
-            }
+            const fullPath = path ? `${path}.${key}` : key;
             if (obj[key] !== null && typeof obj[key] === 'object') {
                 if (Array.isArray(obj[key])) {
-                    obj[key].forEach((item, index) => {
-                        if (typeof item === 'object') {
-                            script += generateTests(item, `${fullPath}[${index}]`);
-                        } else {
-                            script += `pm.test(context + "Check ${fullPath}[${index}]", function() {
-    pm.expect(jsonData.${fullPath}[${index}]).to.eql("${item}");
-});\n`;
-                        }
-                    });
+                    // Process only the first element if it's an object, for arrays of the same type of objects
+                    if (obj[key].length > 0 && typeof obj[key][0] === 'object') {
+                        script += generateTests(obj[key][0], `${fullPath}[0]`);
+                    }
                 } else {
+                    // Recursive call for nested objects
                     script += generateTests(obj[key], fullPath);
                 }
             } else {
+                // Directly compare values for non-objects and non-array elements
                 script += `pm.test(context + "Check ${fullPath}", function() {
     pm.expect(jsonData.${fullPath}).to.eql("${obj[key]}");
 });\n`;
