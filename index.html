@@ -8,7 +8,6 @@
 </head>
 <body>
 <h1>Test Script Generator</h1>
-<div id="lastCommitDate" style="position: absolute; top: 0; right: 0; padding: 10px;">Última atualização:</div>
 <div style="display:flex; justify-content:space-between;">
     <div>
         <input type="number" id="inputStatusCode" placeholder="HTTP Status Code" />
@@ -19,9 +18,14 @@
         <button onclick="populate500()">Populate 500</button>
     </div>
 </div>
-<textarea id="inputJson" placeholder="Paste your JSON here"></textarea>
-<button onclick="generateTestScript()">Generate Test Script</button>
-<pre id="output"></pre>
+<div style="display:flex; justify-content:space-between;">
+    <div id="inputContainer">
+        <textarea id="inputJson" placeholder="Paste your JSON here"></textarea>
+    </div>
+    <div id="outputContainer">
+        <pre id="output"></pre>
+    </div>
+</div>
 
 <script src="script.js"></script>
 <script>

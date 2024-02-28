@@ -74,6 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             ]
         }, null, 2); // Format the JSON for readability
+        generateTestScript();
     };
 
     window.populate500 = function() {
@@ -87,18 +88,10 @@ document.addEventListener('DOMContentLoaded', function() {
             "causingSystemMessage": "Required request parameter 'score' for method parameter type Double is present but converted to null",
             "datetime": "2024-02-28 17:31:30"
         }, null, 2); // Format the JSON for readability
+        generateTestScript();
     };
 
-    fetch('https://api.github.com/repos/matosze/respTest/commits?per_page=1')
-    .then(response => response.json())
-    .then(data => {
-        const lastCommitDate = new Date(data[0].commit.committer.date);
-        // Format the date in Portuguese
-        const options = { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
-        const formattedDate = lastCommitDate.toLocaleString('pt-PT', options);
-        document.getElementById('lastCommitDate').textContent = `Última atualização: ${formattedDate}`;
-    })
-    .catch(console.error);
+
 
     // Function to create and append status code buttons
     function createStatusCodeButton(code) {
@@ -120,6 +113,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Example: Populate status code function (ensure you have this implemented)
     window.populateStatusCode = function(code) {
         document.getElementById('inputStatusCode').value = code;
+        generateTestScript();
     };
 
     window.generateTestScript = function() {
