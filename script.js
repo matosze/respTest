@@ -89,6 +89,39 @@ document.addEventListener('DOMContentLoaded', function() {
         }, null, 2); // Format the JSON for readability
     };
 
+    fetch('https://api.github.com/repos/matosze/respTest/commits?per_page=1')
+    .then(response => response.json())
+    .then(data => {
+        const lastCommitDate = new Date(data[0].commit.committer.date);
+        // Format the date in Portuguese
+        const options = { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+        const formattedDate = lastCommitDate.toLocaleString('pt-PT', options);
+        document.getElementById('lastCommitDate').textContent = `Última atualização: ${formattedDate}`;
+    })
+    .catch(console.error);
+
+    // Function to create and append status code buttons
+    function createStatusCodeButton(code) {
+        const btn = document.createElement("button");
+        btn.textContent = code; // Set button text to the status code
+        btn.onclick = function() { populateStatusCode(code); }; // Set onclick behavior
+        document.getElementById("statusButtons").appendChild(btn); // Append button to the container
+    }
+
+    // Array of common 400 and 500 status codes
+    const commonStatusCodes = [
+        400, 401, 403, 404, 405, 406, 407, 408, 409, 410, // Common 400 range codes
+        500, 501, 502, 503, 504  // Common 500 range code
+    ];
+
+    // Generate buttons for each common status code
+    commonStatusCodes.forEach(createStatusCodeButton);
+
+    // Example: Populate status code function (ensure you have this implemented)
+    window.populateStatusCode = function(code) {
+        document.getElementById('inputStatusCode').value = code;
+    };
+
     window.generateTestScript = function() {
         const inputStatusCode = document.getElementById('inputStatusCode').value;
         const inputJson = document.getElementById('inputJson').value;
@@ -138,4 +171,6 @@ pm.test(context + "Validate response body JSON", function () {
         });
         return script;
     }
+
+    document.getElementById('inputJson').addEventListener('input', generateTestScript);
 }); 
