@@ -3,7 +3,75 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('inputStatusCode').value = 200;
         document.getElementById('inputJson').value = JSON.stringify({
             "contacts": [
-                // Your predefined JSON object for status 200
+                {
+                    "customerReference": 7,
+                    "docType": "101",
+                    "docReference": "3094618",
+                    "docCountryCode": "PRT",
+                    "shortname": "AGÊNCIA FUNERÁRIA",
+                    "returnedMailIndicator": "N",
+                    "customerType": "P",
+                    "contactStatus": "A",
+                    "contactType": "0301",
+                    "contactTypeDescription": "CORR.ELECTR.PESSOAL",
+                    "contactSeq": 8,
+                    "contact": "TIAGO.NORONHA@UNIPARTNER.COM",
+                    "contactExtension": "",
+                    "contactStartDate": "0000",
+                    "contactEndDate": "0000",
+                    "contactStartDate2": "0000",
+                    "contactEndDate2": "0000",
+                    "relativesContact": "N",
+                    "serviceContact": false,
+                    "certificationStatus": "PENDING",
+                    "countryCode": ""
+                },
+                {
+                    "customerReference": 7,
+                    "docType": "101",
+                    "docReference": "3094618",
+                    "docCountryCode": "PRT",
+                    "shortname": "AGÊNCIA FUNERÁRIA",
+                    "returnedMailIndicator": "N",
+                    "customerType": "P",
+                    "contactStatus": "A",
+                    "contactType": "0301",
+                    "contactTypeDescription": "CORR.ELECTR.PESSOAL",
+                    "contactSeq": 9,
+                    "contact": "VER DETALHE",
+                    "contactExtension": "",
+                    "contactStartDate": "0000",
+                    "contactEndDate": "0000",
+                    "contactStartDate2": "0000",
+                    "contactEndDate2": "0000",
+                    "relativesContact": "N",
+                    "serviceContact": false,
+                    "certificationStatus": "NOT_CERTIFIED",
+                    "countryCode": ""
+                },
+                {
+                    "customerReference": 7,
+                    "docType": "101",
+                    "docReference": "3094618",
+                    "docCountryCode": "PRT",
+                    "shortname": "AGÊNCIA FUNERÁRIA",
+                    "returnedMailIndicator": "N",
+                    "customerType": "P",
+                    "contactStatus": "A",
+                    "contactType": "0302",
+                    "contactTypeDescription": "CORR.ELECTR.EMPREGO",
+                    "contactSeq": 4,
+                    "contact": "JPRODRIGUES@MONTEPIO.PT",
+                    "contactExtension": "",
+                    "contactStartDate": "0000",
+                    "contactEndDate": "0000",
+                    "contactStartDate2": "0000",
+                    "contactEndDate2": "0000",
+                    "relativesContact": "N",
+                    "serviceContact": false,
+                    "certificationStatus": "NOT_CERTIFIED",
+                    "countryCode": ""
+                }
             ]
         }, null, 2); // Format the JSON for readability
     };
@@ -11,7 +79,13 @@ document.addEventListener('DOMContentLoaded', function() {
     window.populate500 = function() {
         document.getElementById('inputStatusCode').value = 500;
         document.getElementById('inputJson').value = JSON.stringify({
-            // Your predefined JSON object for status 500
+            "message": "A Generic Technical error has occurred",
+            "code": "TECHNICAL_ERROR",
+            "detail": "Required request parameter 'score' for method parameter type Double is present but converted to null",
+            "causingSystemName": "/override-google-lock",
+            "causingSystemErrorCode": "org.springframework.web.bind.MissingServletRequestParameterException",
+            "causingSystemMessage": "Required request parameter 'score' for method parameter type Double is present but converted to null",
+            "datetime": "2024-02-28 17:31:30"
         }, null, 2); // Format the JSON for readability
     };
 
