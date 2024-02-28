@@ -6,7 +6,10 @@ textarea {
     height: 150px;
 }
 pre {
-    background-color: #f0f0f0;
-    padding: 10px;
-    border: 1px solid #ddd;
-} 
+    white-space: pre-wrap; /* Allows text to wrap */
+    word-wrap: break-word; /* Ensures long words do not overflow */
+    background-color: #f0f0f0; /* Background color, assuming from previous example */
+    padding: 10px; /* Padding, assuming from previous example */
+    border: 1px solid #ddd; /* Border, assuming from previous example */
+    overflow-x: auto; /* Adds horizontal scrolling if needed */
+}
