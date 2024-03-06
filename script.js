@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-
     window.populate200 = function () {
         document.getElementById('inputStatusCode').value = 200;
         document.getElementById('inputJson').value = JSON.stringify({
@@ -93,7 +92,6 @@ document.addEventListener('DOMContentLoaded', function () {
         generateTestScript();
     };
 
-
     window.copyToClipboard = function () {
         const outputText = document.getElementById('output').textContent;
         navigator.clipboard.writeText(outputText).then(function () {
@@ -141,7 +139,6 @@ document.addEventListener('DOMContentLoaded', function () {
         for (let key in obj) {
             if (Array.isArray(obj[key])) {
                 let arrayItemType = typeof obj[key][0];
-                // Handle empty array case by specifying an empty schema for its items
                 if (obj[key].length === 0) {
                     schema.properties[key] = { type: "array", items: {} };
                 } else if (arrayItemType === 'object') {
@@ -150,18 +147,16 @@ document.addEventListener('DOMContentLoaded', function () {
                         items: generateJsonSchema(obj[key][0], `${key} Item Schema`)
                     };
                 } else {
-                    // Determine if the items are integers or floats for number type
-                    let itemType = arrayItemType === 'number' ? (Number.isInteger(obj[key][0]) ? "integer" : "number") : arrayItemType;
                     schema.properties[key] = {
                         type: "array",
-                        items: { type: itemType }
+                        items: { type: "number" } // Use "number" to accommodate both integers and floats
                     };
                 }
             } else if (typeof obj[key] === "object" && obj[key] !== null) {
                 schema.properties[key] = generateJsonSchema(obj[key], `${key} Schema`);
             } else {
-                // For numbers, check if they are integers or floats
                 let propType = typeof obj[key];
+                // Adjust this snippet within generateJsonSchema or during schema use
                 if (propType === 'number') {
                     propType = Number.isInteger(obj[key]) ? "integer" : "number";
                 }
@@ -173,18 +168,16 @@ document.addEventListener('DOMContentLoaded', function () {
         return schema;
     }
 
-
     window.generateTestScript = function() {
         const inputStatusCode = document.getElementById('inputStatusCode').value;
         const inputJson = document.getElementById('inputJson').value;
         try {
             const responseBody = JSON.parse(inputJson);
             let schema = generateJsonSchema(responseBody); // Generate the JSON Schema based on input
-            let fieldTests = generateTests(responseBody, ''); // Generate field-level tests
+            let fieldTests = generateTests(responseBody, '', true); // Root call
 
             let testScript = `const context = pm.info.requestName + " | ";
 const response = pm.response.json();\n\n`;
-
 
             testScript += `pm.test(context + "Status code is ${inputStatusCode}", function () {
     pm.response.to.have.status(${inputStatusCode});
@@ -213,41 +206,38 @@ const response = pm.response.json();\n\n`;
     };
 
 
-
-    function generateTests(obj, path) {
+    function generateTests(obj, path, isRoot = false) {
         let script = '';
-        Object.keys(obj).forEach(key => {
+        if (isRoot) {
+            script += `pm.test('${path || 'Validate response fields'}', function() {\n`;
+        }
+
+        const keys = Object.keys(obj);
+        keys.forEach((key, index) => {
             const fullPath = path ? `${path}.${key}` : key;
-            if (obj[key] !== null && typeof obj[key] === 'object') {
-                if (Array.isArray(obj[key])) {
-                    // Check if the array is not empty and if the first element is an object (indicating nested objects in array)
-                    if (obj[key].length > 0 && typeof obj[key][0] === 'object') {
-                        script += `    // First element of ${fullPath}\n`;
-                        script += generateTests(obj[key][0], `${fullPath}[0]`);
-                        // If the array has more than one element and is an object, also do it for the last element
-                        if (obj[key].length > 1) {
-                            script += `    // Last element of ${fullPath}\n`;
-                            script += generateTests(obj[key][obj[key].length - 1], `${fullPath}[${obj[key].length - 1}]`);
-                        }
-                    } else if (obj[key].length > 0) {
-                        // Handle arrays of primitives (e.g., strings) directly without iterating through characters
-                        script += `    pm.expect(response.${fullPath}[0]).to.eql(${JSON.stringify(obj[key][0])});\n`;
-                        if (obj[key].length > 1) {
-                            script += `    pm.expect(response.${fullPath}[${obj[key].length - 1}]).to.eql(${JSON.stringify(obj[key][obj[key].length - 1])});\n`;
-                        }
+            const isLastElement = index === keys.length - 1;
+
+            if (Array.isArray(obj[key])) {
+                if (obj[key].length > 0 && typeof obj[key][0] === 'object') {
+                    script += `    // Tests for the first element of ${fullPath}\n`;
+                    script += generateTests(obj[key][0], `${fullPath}[0]`, false);
+                    if (obj[key].length > 1) {
+                        script += `    // Tests for the last element of ${fullPath}\n`;
+                        script += generateTests(obj[key][obj[key].length - 1], `${fullPath}[${obj[key].length - 1}]`, false);
                     }
-                } else {
-                    // Recursive call for nested objects
-                    script += generateTests(obj[key], fullPath);
                 }
+            } else if (typeof obj[key] === 'object' && obj[key] !== null) {
+                script += generateTests(obj[key], fullPath, false);
             } else {
-                // Directly compare values for non-objects and non-array elements
                 script += `    pm.expect(response.${fullPath}).to.eql(${JSON.stringify(obj[key])});\n`;
             }
         });
+
+        if (isRoot) {
+            script += '});\n\n';
+        }
         return script;
     }
-
 
     document.getElementById('inputJson').addEventListener('input', generateTestScript);
     // Attach the event listener to the copy button
