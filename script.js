@@ -149,17 +149,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else {
                     schema.properties[key] = {
                         type: "array",
-                        items: { type: "number" } // Use "number" to accommodate both integers and floats
+                        items: { type: arrayItemType }
                     };
                 }
             } else if (typeof obj[key] === "object" && obj[key] !== null) {
                 schema.properties[key] = generateJsonSchema(obj[key], `${key} Schema`);
             } else {
-                let propType = typeof obj[key];
-                // Adjust this snippet within generateJsonSchema or during schema use
-                if (propType === 'number') {
-                    propType = Number.isInteger(obj[key]) ? "integer" : "number";
-                }
+                // Here we simplify the handling by considering every number as type "number"
+                let propType = typeof obj[key] === 'number' ? "number" : typeof obj[key];
                 schema.properties[key] = { type: propType };
                 schema.required.push(key);
             }
@@ -167,6 +164,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         return schema;
     }
+
 
     window.generateTestScript = function() {
         const inputStatusCode = document.getElementById('inputStatusCode').value;
