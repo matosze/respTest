@@ -129,7 +129,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function generateJsonSchema(obj, title = "Root Schema") {
         let schema = {
-            "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "object",
             "title": title,
             "required": [],
