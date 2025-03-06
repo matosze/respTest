@@ -226,7 +226,8 @@ const response = pm.response.json();\n\n`;
             } else if (typeof obj[key] === 'object' && obj[key] !== null) {
                 script += generateTests(obj[key], fullPath, false);
             } else {
-                script += `    pm.expect(response.${fullPath}).to.eql(${JSON.stringify(obj[key])});\n`;
+                const bracketPath = fullPath.split('.').map(part => `["${part}"]`).join('');
+                script += `    pm.expect(response${bracketPath}).to.eql(${JSON.stringify(obj[key])});\n`;
             }
         });
 
