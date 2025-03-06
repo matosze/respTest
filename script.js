@@ -206,7 +206,8 @@ const response = pm.response.json();\n\n`;
     function generateTests(obj, path, isRoot = false) {
         let script = '';
         if (isRoot) {
-            script += `pm.test('${path || context + "Validate response fields"'}, function() {\n`;
+            const testDescription = path ? `'${path}'` : "context + \"Validate response fields\"";
+            script += `pm.test(${testDescription}, function() {\n`;
         }
 
         const keys = Object.keys(obj);
